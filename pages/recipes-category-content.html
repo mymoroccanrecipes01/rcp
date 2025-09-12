@@ -1,0 +1,329 @@
+
+    <!-- Hero Section -->
+    <section class="recipes-hero">
+        <div class="container">
+            <h1>Toutes nos Recettes</h1>
+            <p>Découvrez notre collection complète de recettes organisées par catégories</p>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+        <div class="container">
+            <!-- Entrées -->
+            <div class="category-block">
+                <h2 class="category-title">🥗 Entrées</h2>
+                <div class="recipes-grid">
+                    <div class="recipe-card" onclick="openRecipe(1)">
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=200&fit=crop" alt="Salade César">
+                        <div class="recipe-info">
+                            <h3>Salade César</h3>
+                            <p>Une salade fraîche et croquante avec une vinaigrette crémeuse.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 15 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 2 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(2)">
+                        <img src="https://images.unsplash.com/photo-1541544181051-e46607bc22b4?w=300&h=200&fit=crop" alt="Bruschetta">
+                        <div class="recipe-info">
+                            <h3>Bruschetta Tomate Basilic</h3>
+                            <p>Des toasts croustillants garnis de tomates fraîches et basilic.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 15 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 4 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(3)">
+                        <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?w=300&h=200&fit=crop" alt="Houmous">
+                        <div class="recipe-info">
+                            <h3>Houmous Maison</h3>
+                            <p>Un houmous crémeux aux pois chiches, parfait avec des légumes.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 10 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 6 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(4)">
+                        <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433a?w=300&h=200&fit=crop" alt="Gaspacho">
+                        <div class="recipe-info">
+                            <h3>Gaspacho Andalou</h3>
+                            <p>Une soupe froide rafraîchissante parfaite pour l'été.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 15 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 4 pers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plats Principaux -->
+            <div class="category-block">
+                <h2 class="category-title">🍽️ Plats Principaux</h2>
+                <div class="recipes-grid">
+                    <div class="recipe-card" onclick="openRecipe(5)">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=300&h=200&fit=crop" alt="Pasta Carbonara">
+                        <div class="recipe-info">
+                            <h3>Pasta Carbonara</h3>
+                            <p>Un classique italien simple et délicieux avec des œufs, du parmesan et du bacon.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 20 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 4 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(6)">
+                        <img src="https://images.unsplash.com/photo-1555939594-58e837ef1ef5?w=300&h=200&fit=crop" alt="Poulet Rôti">
+                        <div class="recipe-info">
+                            <h3>Poulet Rôti aux Herbes</h3>
+                            <p>Un poulet juteux et savoureux rôti avec des herbes de Provence.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 1h 30</span>
+                                <span>👨‍🍳 Moyen</span>
+                                <span>🍽️ 6 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(7)">
+                        <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=300&h=200&fit=crop" alt="Saumon Grillé">
+                        <div class="recipe-info">
+                            <h3>Saumon Grillé</h3>
+                            <p>Un saumon grillé à la perfection avec des légumes de saison.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 25 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 4 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(8)">
+                        <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=300&h=200&fit=crop" alt="Tacos">
+                        <div class="recipe-info">
+                            <h3>Tacos au Bœuf</h3>
+                            <p>Des tacos savoureux avec du bœuf épicé et des légumes frais.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 20 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 4 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(9)">
+                        <img src="https://images.unsplash.com/photo-1588767768106-1dd4aa98dd18?w=300&h=200&fit=crop" alt="Paella">
+                        <div class="recipe-info">
+                            <h3>Paella Valenciana</h3>
+                            <p>La paella authentique espagnole avec fruits de mer et safran.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 1h</span>
+                                <span>👨‍🍳 Difficile</span>
+                                <span>🍽️ 8 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(10)">
+                        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=300&h=200&fit=crop" alt="Soupe de Légumes">
+                        <div class="recipe-info">
+                            <h3>Soupe de Légumes</h3>
+                            <p>Une soupe réconfortante pleine de légumes de saison.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 40 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 6 pers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desserts -->
+            <div class="category-block">
+                <h2 class="category-title">🍰 Desserts</h2>
+                <div class="recipes-grid">
+                    <div class="recipe-card" onclick="openRecipe(11)">
+                        <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=300&h=200&fit=crop" alt="Tiramisu">
+                        <div class="recipe-info">
+                            <h3>Tiramisu Maison</h3>
+                            <p>Le dessert italien par excellence avec mascarpone, café et cacao.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 45 min</span>
+                                <span>👨‍🍳 Moyen</span>
+                                <span>🍽️ 6 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(12)">
+                        <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=300&h=200&fit=crop" alt="Muffins">
+                        <div class="recipe-info">
+                            <h3>Muffins aux Myrtilles</h3>
+                            <p>Des muffins moelleux et fruités parfaits pour le petit-déjeuner.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 30 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 12 pcs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(13)">
+                        <img src="https://images.unsplash.com/photo-1501959915551-4e8d30928317?w=300&h=200&fit=crop" alt="Tarte aux Pommes">
+                        <div class="recipe-info">
+                            <h3>Tarte aux Pommes</h3>
+                            <p>Une tarte classique avec des pommes caramélisées et pâte brisée.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 1h 15</span>
+                                <span>👨‍🍳 Moyen</span>
+                                <span>🍽️ 8 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(14)">
+                        <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=300&h=200&fit=crop" alt="Cookies">
+                        <div class="recipe-info">
+                            <h3>Cookies Chocolat</h3>
+                            <p>Des cookies moelleux aux pépites de chocolat, un régal pour tous.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 25 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 20 pcs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recettes Rapides -->
+            <div class="category-block">
+                <h2 class="category-title">⚡ Recettes Rapides (moins de 30 min)</h2>
+                <div class="recipes-grid">
+                    <div class="recipe-card" onclick="openRecipe(15)">
+                        <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&h=200&fit=crop" alt="Smoothie Bowl">
+                        <div class="recipe-info">
+                            <h3>Smoothie Bowl Açaï</h3>
+                            <p>Un petit-déjeuner sain et coloré aux fruits frais et superaliments.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 10 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 2 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(16)">
+                        <img src="https://images.unsplash.com/photo-1506084868230-bb9d95c24759?w=300&h=200&fit=crop" alt="Omelette">
+                        <div class="recipe-info">
+                            <h3>Omelette aux Fines Herbes</h3>
+                            <p>Une omelette moelleuse et parfumée aux herbes fraîches.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 8 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 1 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(17)">
+                        <img src="https://images.unsplash.com/photo-1528736235302-52922df5c122?w=300&h=200&fit=crop" alt="Sandwich Club">
+                        <div class="recipe-info">
+                            <h3>Club Sandwich</h3>
+                            <p>Un sandwich généreux avec poulet, bacon, salade et tomates.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 15 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 2 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(18)">
+                        <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=300&h=200&fit=crop" alt="Pâtes Aglio e Olio">
+                        <div class="recipe-info">
+                            <h3>Pâtes Aglio e Olio</h3>
+                            <p>Des spaghetti simples à l'ail, huile d'olive et piment.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 12 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 2 pers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recettes Healthy -->
+            <div class="category-block">
+                <h2 class="category-title">🥬 Recettes Healthy</h2>
+                <div class="recipes-grid">
+                    <div class="recipe-card" onclick="openRecipe(19)">
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=200&fit=crop" alt="Buddha Bowl">
+                        <div class="recipe-info">
+                            <h3>Buddha Bowl Quinoa</h3>
+                            <p>Un bol complet avec quinoa, légumes rôtis et avocat.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 35 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 2 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(20)">
+                        <img src="https://images.unsplash.com/photo-1544681280-d6120fd9fe30?w=300&h=200&fit=crop" alt="Salade de Quinoa">
+                        <div class="recipe-info">
+                            <h3>Salade de Quinoa aux Légumes</h3>
+                            <p>Une salade nutritive avec quinoa, légumes croquants et vinaigrette citron.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 25 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 4 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(21)">
+                        <img src="https://images.unsplash.com/photo-1505253758473-96b7015fcd40?w=300&h=200&fit=crop" alt="Wrap Légumes">
+                        <div class="recipe-info">
+                            <h3>Wrap aux Légumes Grillés</h3>
+                            <p>Un wrap coloré avec légumes grillés et houmous maison.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 20 min</span>
+                                <span>👨‍🍳 Facile</span>
+                                <span>🍽️ 2 pers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="openRecipe(22)">
+                        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=300&h=200&fit=crop" alt="Poké Bowl">
+                        <div class="recipe-info">
+                            <h3>Poké Bowl au Saumon</h3>
+                            <p>Un bol hawaiien frais avec saumon cru, riz et légumes.</p>
+                            <div class="recipe-meta">
+                                <span>⏱️ 30 min</span>
+                                <span>👨‍🍳 Moyen</span>
+                                <span>🍽️ 2 pers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
