@@ -902,7 +902,16 @@
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser immédiatement les données par défaut
+            initializeLocalData();
+            
+            // Charger les catégories
             loadCategories();
+            
+            // Message de bienvenue dans la console
+            console.log('🎉 Gestionnaire de Catégories - Mode localStorage');
+            console.log('💾 Vos données sont sauvegardées localement dans le navigateur');
+            console.log('🔄 Pour connecter une vraie base de données, changez USE_LOCAL_STORAGE = false');
         });
     </script>
 </body>
