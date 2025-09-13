@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Upload Image from URL</title>
+</head>
+<body>
+
+<input type="text" id="imageUrl" placeholder="Paste image URL here" style="width:400px">
+<button id="uploadBtn">Upload Image</button>
+<div id="status"></div>
+
+<script>
+document.getElementById('uploadBtn').addEventListener('click', async () => {
+    const url = document.getElementById('imageUrl').value.trim();
+    const status = document.getElementById('status');
+    status.textContent = '';
+
+    if (!url) return alert('Paste a valid image URL');
+
+    try {
+        status.textContent = 'Downloading image...';
+
+        // fetch image as blob
+        const response = await fetch(url, {mode:'cors'});
+        if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
+        const blob = await response.blob();
+
+        status.textContent = 'Uploading image to server...';
+
+        const formData = new FormData();
+        formData.append('file', blob, 'image.png'); // you can customize filename
+
+        // POST to PHP uploader
+        const uploadResp = await fetch('upload.php', { method:'POST', body: formData });
+        const result = await uploadResp.json(); // will succeed because PHP returns JSON
+
+        if (result.ok) {
+            status.innerHTML = `✅ Uploaded: <a href="${result.path}" target="_blank">${result.filename}</a>`;
+        } else {
+            status.textContent = '❌ Upload failed: ' + (result.error || 'Unknown error');
+        }
+
+    } catch (e) {
+        console.error(e);
+        status.textContent = '❌ Error: ' + e.message;
+    }
+});
+</script>
+
+</body>
+</html>

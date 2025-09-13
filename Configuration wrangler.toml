@@ -1,0 +1,20 @@
+name = "category-manager"
+main = "src/index.js"
+compatibility_date = "2024-01-15"
+
+# Configuration de la base de données D1
+[[d1_databases]]
+binding = "DB"
+database_name = "recipe_database"
+database_id = "653e5779-4675-4dc7-bcab-217d031fce48"  # À remplacer par l'ID généré
+
+# Variables d'environnement
+[env.production.vars]
+ENVIRONMENT = "production"
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+
+# Configuration CORS
+[vars]
+CORS_ORIGIN = "*"  # À adapter selon vos besoins

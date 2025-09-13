@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Catégories - Cloudflare D1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-edit {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        }
+
+        .btn-delete {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-bar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 12px 20px;
+            color: white;
+            width: 300px;
+            font-size: 16px;
+        }
+
+        .search-bar::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+        }
+
+        .category-content {
+            padding: 20px;
+        }
+
+        .category-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .category-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .category-meta {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .category-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .image-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .url-test-btn {
+            background: linear-gradient(45deg, #FF9800, #F57C00);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .url-test-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px 25px;
+            color: white;
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .pagination-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            color: white;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .error-message {
+            background: #f44336;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .api-status {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: white;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.offline {
+            background: #f44336;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .header-actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .stats {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏷️ Gestionnaire de Catégories</h1>
+        
+        <div class="api-status" id="apiStatus">
+            <div class="status-indicator" id="statusIndicator"></div>
+            <span id="statusText">Connexion à l'API...</span>
+        </div>
+
+        <div class="stats" id="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="categoryCount">0</div>
+                <div class="stat-label">Catégories</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="currentPage">1</div>
+                <div class="stat-label">Page</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalPages">1</div>
+                <div class="stat-label">Total pages</div>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="openModal()" id="addBtn">
+                ➕ Nouvelle Catégorie
+            </button>
+            <div class="search-controls">
+                <input type="text" class="search-bar" placeholder="🔍 Rechercher une catégorie..." id="searchInput">
+                <button class="btn btn-primary" onclick="refreshData()" id="refreshBtn">
+                    🔄 Actualiser
+                </button>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <div class="loading" id="loading">
+            ⏳ Chargement des données...
+        </div>
+
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Les catégories seront chargées ici -->
+        </div>
+
+        <div class="pagination" id="pagination" style="display: none;">
+            <button class="pagination-btn" onclick="goToPage(currentPageNum - 1)" id="prevBtn">⬅️ Précédent</button>
+            <div class="pagination-info" id="paginationInfo">Page 1 sur 1</div>
+            <button class="pagination-btn" onclick="goToPage(currentPageNum + 1)" id="nextBtn">Suivant ➡️</button>
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <h3>Aucune catégorie trouvée</h3>
+            <p>Commencez par créer votre première catégorie !</p>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter/éditer une catégorie -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Nouvelle Catégorie</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label class="form-label">Nom de la catégorie *</label>
+                    <input type="text" class="form-input" id="categoryName" required placeholder="Ex: Électronique">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="categoryDescription" placeholder="Description de la catégorie..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">URL de l'image (WebP recommandé)</label>
+                    <input type="url" class="form-input" id="categoryImageUrl" placeholder="https://cdn.example.com/image.webp">
+                    <button type="button" class="url-test-btn" onclick="testImageUrl()">🔍 Tester l'URL</button>
+                    <img class="image-preview" id="imagePreview" alt="Aperçu">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="saveBtn">
+                        💾 Sauvegarder
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Configuration API
+        const API_BASE = '/api'; // URL de base de votre Worker Cloudflare
+        // Pour les tests locaux, remplacez par : 'http://localhost:8787/api'
+        // Pour la production : 'https://your-worker.your-subdomain.workers.dev/api'
+
+        let categories = [];
+        let editingId = null;
+        let currentPageNum = 1;
+        let totalPages = 1;
+        let totalItems = 0;
+        let currentSearch = '';
+        const itemsPerPage = 12;
+
+        // Gestion de l'état de l'API
+        function updateApiStatus(isOnline) {
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            
+            if (isOnline) {
+                indicator.classList.remove('offline');
+                statusText.textContent = 'API connectée';
+            } else {
+                indicator.classList.add('offline');
+                statusText.textContent = 'API déconnectée';
+            }
+        }
+
+        // Fonctions utilitaires pour les messages
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Appels API
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `Erreur HTTP: ${response.status}`);
+                }
+
+                updateApiStatus(true);
+                return await response.json();
+            } catch (error) {
+                updateApiStatus(false);
+                console.error('Erreur API:', error);
+                throw error;
+            }
+        }
+
+        // Charger les catégories avec pagination et recherche
+        async function loadCategories(page = 1, search = '') {
+            try {
+                document.getElementById('loading').classList.add('show');
+                
+                const params = new URLSearchParams({
+                    page: page.toString(),
+                    limit: itemsPerPage.toString()
+                });
+
+                if (search) {
+                    params.append('search', search);
+                }
+
+                const result = await apiCall(`/categories?${params}`);
+                
+                categories = result.data || [];
+                currentPageNum = result.pagination?.page || 1;
+                totalPages = result.pagination?.pages || 1;
+                totalItems = result.pagination?.total || 0;
+                currentSearch = search;
+
+                renderCategories();
+                updatePagination();
+                updateStats();
+                
+            } catch (error) {
+                showError('Erreur lors du chargement des catégories: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+            }
+        }
+
+        // Afficher les catégories
+        function renderCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (categories.length === 0) {
+                grid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            
+            grid.innerHTML = categories.map(category => {
+                const createdDate = new Date(category.created_at).toLocaleDateString('fr-FR');
+                const isUpdated = category.updated_at !== category.created_at;
+                const updatedDate = isUpdated ? new Date(category.updated_at).toLocaleDateString('fr-FR') : null;
+                
+                return `
+                    <div class="category-card">
+                        <img src="${category.image_url || 'https://via.placeholder.com/400x200/f0f0f0/999?text=Pas+d\'image'}" 
+                             alt="${category.name}" 
+                             class="category-image"
+                             onerror="this.src='https://via.placeholder.com/400x200/f0f0f0/999?text=Image+introuvable'">
+                        <div class="category-content">
+                            <h3 class="category-name">${category.name}</h3>
+                            <p class="category-description">${category.description || 'Aucune description'}</p>
+                            <div class="category-meta">
+                                ID: ${category.id} | Slug: ${category.slug}<br>
+                                Créé: ${createdDate}${updatedDate ? ` | Modifié: ${updatedDate}` : ''}
+                            </div>
+                            <div class="category-actions">
+                                <button class="btn btn-edit" onclick="editCategory(${category.id})">
+                                    ✏️ Modifier
+                                </button>
+                                <button class="btn btn-delete" onclick="deleteCategory(${category.id})">
+                                    🗑️ Supprimer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Créer ou modifier une catégorie
+        async function saveCategory(categoryData) {
+            try {
+                document.getElementById('saveBtn').disabled = true;
+                document.getElementById('saveBtn').textContent = '💾 Sauvegarde...';
+
+                let result;
+                if (editingId) {
+                    result = await apiCall(`/categories/${editingId}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(categoryData)
+                    });
+                } else {
+                    result = await apiCall('/categories', {
+                        method: 'POST',
+                        body: JSON.stringify(categoryData)
+                    });
+                }
+
+                showSuccess(result.message || 'Catégorie sauvegardée avec succès !');
+                closeModal();
+                await loadCategories(currentPageNum, currentSearch);
+                
+            } catch (error) {
+                showError('Erreur lors de la sauvegarde: ' + error.message);
+            } finally {
+                document.getElementById('saveBtn').disabled = false;
+                document.getElementById('saveBtn').textContent = '💾 Sauvegarder';
+            }
+        }
+
+        // Modifier une catégorie
+        async function editCategory(id) {
+            try {
+                const result = await apiCall(`/categories/${id}`);
+                const category = result.data;
+
+                editingId = id;
+                document.getElementById('modalTitle').textContent = 'Modifier la catégorie';
+                document.getElementById('categoryName').value = category.name;
+                document.getElementById('categoryDescription').value = category.description || '';
+                document.getElementById('categoryImageUrl').value = category.image_url || '';
+                
+                if (category.image_url) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = category.image_url;
+                    preview.style.display = 'block';
+                }
+                
+                openModal();
+            } catch (error) {
+                showError('Erreur lors du chargement de la catégorie: ' + error.message);
+            }
+        }
+
+        // Supprimer une catégorie
+        async function deleteCategory(id) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) {
+                return;
+            }
+
+            try {
+                const result = await apiCall(`/categories/${id}`, {
+                    method: 'DELETE'
+                });
+
+                showSuccess(result.message || 'Catégorie supprimée avec succès !');
+                await loadCategories(currentPageNum, currentSearch);
+                
+            } catch (error) {
+                showError('Erreur lors de la suppression: ' + error.message);
+            }
+        }
+
+        // Gestion de la pagination
+        function updatePagination() {
+            const pagination = document.getElementById('pagination');
+            const paginationInfo = document.getElementById('paginationInfo');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (totalPages > 1) {
+                pagination.style.display = 'flex';
+                paginationInfo.textContent = `Page ${currentPageNum} sur ${totalPages}`;
+                prevBtn.disabled = currentPageNum <= 1;
+                nextBtn.disabled = currentPageNum >= totalPages;
+            } else {
+                pagination.style.display = 'none';
+            }
+        }
+
+        function goToPage(page) {
+            if (page >= 1 && page <= totalPages && page !== currentPageNum) {
+                loadCategories(page, currentSearch);
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('categoryCount').textContent = totalItems;
+            document.getElementById('currentPage').textContent = currentPageNum;
+            document.getElementById('totalPages').textContent = totalPages;
+        }
+
+        // Gestion du modal
+        function openModal() {
+            document.getElementById('categoryModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('categoryModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+            
+            // Reset du formulaire
+            document.getElementById('categoryForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('modalTitle').textContent = 'Nouvelle Catégorie';
+            editingId = null;
+        }
+
+        // Test de l'URL d'image
+        function testImageUrl() {
+            const url = document.getElementById('categoryImageUrl').value;
+            const preview = document.getElementById('imagePreview');
+            
+            if (!url) {
+                showError('Veuillez saisir une URL d\'image');
+                return;
+            }
+
+            preview.style.display = 'block';
+            preview.src = url;
+            
+            preview.onload = function() {
+                showSuccess('Image chargée avec succès !');
+            };
+            
+            preview.onerror = function() {
+                showError('Impossible de charger l\'image. Vérifiez l\'URL.');
+                preview.style.display = 'none';
+            };
+        }
+
+        // Actualiser les données
+        async function refreshData() {
+            await loadCategories(currentPageNum, currentSearch);
+        }
+
+        // Recherche avec debounce
+        let searchTimeout;
+        function handleSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchTerm = document.getElementById('searchInput').value.trim();
+                loadCategories(1, searchTerm);
+            }, 500);
+        }
+
+        // Gestion du formulaire
+        document.getElementById('categoryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('categoryName').value.trim(),
+                description: document.getElementById('categoryDescription').value.trim(),
+                image_url: document.getElementById('categoryImageUrl').value.trim()
+            };
+
+            if (!formData.name) {
+                showError('Le nom de la catégorie est requis');
+                return;
+            }
+
+            await saveCategory(formData);
+        });
+
+        // Événements
+        document.getElementById('searchInput').addEventListener('input', handleSearch);
+
+        // Fermeture du modal en cliquant à l'extérieur
+        document.getElementById('categoryModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Gestion des touches du clavier
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategories();
+        });
+    </script>
+</body>
+</html>
