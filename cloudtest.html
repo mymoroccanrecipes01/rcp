@@ -461,7 +461,7 @@
         
         <div class="api-status" id="apiStatus">
             <div class="status-indicator" id="statusIndicator"></div>
-            <span id="statusText">Connexion à l'API...</span>
+            <span id="statusText">Mode localStorage - Données persistantes locales</span>
         </div>
 
         <div class="stats" id="stats">
@@ -550,10 +550,18 @@
     </div>
 
     <script>
-        // Configuration API
-        const API_BASE = 'https://rcp-85u.pages.dev/api'; // URL de base de votre Worker Cloudflare
-        // Pour les tests locaux, remplacez par : 'http://localhost:8787/api'
-        // Pour la production : 'https://your-worker.your-subdomain.workers.dev/api'
+        // Configuration API - IMPORTANT : Modifiez cette URL !
+        const API_BASE = 'https://your-worker-name.your-subdomain.workers.dev/api'; 
+        
+        // Options de configuration selon votre environnement :
+        // 1. Pour tests locaux avec wrangler dev :
+        // const API_BASE = 'http://localhost:8787/api';
+        
+        // 2. Pour votre Worker déployé sur Cloudflare :
+        // const API_BASE = 'https://category-manager.your-subdomain.workers.dev/api';
+        
+        // 3. Pour un domaine personnalisé :
+        // const API_BASE = 'https://api.votre-domaine.com/api';
 
         let categories = [];
         let editingId = null;
